@@ -1,22 +1,26 @@
 <div class="container-fluid p-5">
-  <div class="btn-group ">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-      Região
-    </button>
-    <ul class="dropdown-menu dropdown-menu-lg-end">
-      <li *ngFor="let item of filtrarItens()"><button class="dropdown-item" type="button">{{ item.regiao }}</button></li>
-    </ul>
-  </div>
+  <form class="form-inline" (ngSubmit)="filtrar()">
+    <div class="row">
+      <div class="col-sm-6 mb-2">
+        <label for="regiao" class="mr-2">Região:</label>
+        <select id="regiao" class="form-control" [(ngModel)]="filtroRegiao" name="regiao">
+          <option value="">Selecione...</option>
+          <option *ngFor="let regiao of regioesDisponiveis" [value]="regiao">{{ regiao }}</option>
+        </select>
+      </div>
+
+      <div class="col-sm-6 mb-2">
+        <label for="especie" class="mr-2">Espécie:</label>
+        <select id="especie" class="form-control" [(ngModel)]="filtroEspecie" name="especie">
+          <option value="">Selecione...</option>
+          <option *ngFor="let especie of especiesDisponiveis" [value]="especie">{{ especie }}</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-info">Filtrar</button>
+  </form>
 </div>
-
-
-<!-- <div class="container-fluid p-5">
-  <input type="text" [(ngModel)]="termoPesquisa" placeholder="Pesquisar...">
-
-  <ul>
-    <li *ngFor="let item of filtrarItens()">{{ item.regiao }}</li>
-  </ul>
-</div> -->
 
 <div class="container-fluid p-5">
   <table class="table table-dark table-striped-columns mt-3">
@@ -24,23 +28,33 @@
       <tr>
         <th scope="col">Região</th>
         <th scope="col">Espécies</th>
-        <th scope="col">Statu de Conservação</th>
+        <th scope="col">Status de Conservação</th>
         <th scope="col">Temperatura da água</th>
         <th scope="col">PH</th>
         <th scope="col">Nivel de poluição</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- @for (item of oceanos; track $index){ -->
-      <tr *ngFor="let item of filtrarItens(); let i = index">
-        <td>{{item.regiao}}</td>
-        <td>{{item.especies}}</td>
-        <td>{{item.projetosConservacao}}</td>
-        <td>{{item.temperaturaAgua}}</td>
-        <td>{{item.pH}}</td>
-        <td>{{item.nivelPoluicao}}</td>
-      </tr>
-      <!-- } -->
+    <tbody>      
+      <tr *ngFor="let oceano of oceanosFiltrados">
+        <td>{{oceano.regiao}}</td>
+        <td>
+          <ul>
+          <li *ngFor="let especie of oceano.especies">
+            {{ especie.nome }} - {{ especie.status }}
+          </li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li *ngFor="let projeto of oceano.projetosConservacao">
+              {{ projeto.nomeProjeto }} - {{ projeto.tipoProjeto }} - {{ projeto.tipoParticipacao }}
+            </li>
+            </ul>
+        </td>
+        <td>{{oceano.temperaturaAgua}}</td>
+        <td>{{oceano.pH}}</td>
+        <td>{{oceano.nivelPoluicao}}</td>
+      </tr>    
     </tbody>
   </table>
 </div>
